@@ -6,25 +6,24 @@ from requests.auth import HTTPBasicAuth
 
 class TwitterOauth:
 
-    CLIENT_ID = os.environ.get("CLIENT_ID")
-    CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
-    OAUTH_URI = "https://twitter.com/i/oauth2/authorize"
-    REDIRECT_URI = "http://127.0.0.1/callback"
+    CLIENT_ID = os.environ.get('CLIENT_ID')
+    CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
+    OAUTH_URI = 'https://twitter.com/i/oauth2/authorize'
+    REDIRECT_URI = 'http://127.0.0.1/callback'
 
-    def get_url(self):
-        param_str = f"response_type=code&client_id={self.CLIENT_ID}&redirect_uri={self.REDIRECT_URI}&scope=tweet.read users.read offline.access&state=state&code_challenge=code_challenge&code_challenge_method=plain"
-        url = self.OAUTH_URI + "?" + param_str
+    def get_url(self, token_code) -> str:
+        param_str = self.__create_login_url_param_str(token_code)
+        url = self.OAUTH_URI + '?' + param_str
         return url
 
-    def fetch_token(self, code):
+    def fetch_token(self, code, code_verifier) -> list:
         endpoint = "oauth2/token"
         data = {
-            "code": code,
-            "client_id": self.CLIENT_ID,
-            "grant_type": "authorization_code",
-            "redirect_uri": self.REDIRECT_URI,
-            "code_verifier": "code_challenge"
-
+            'code': code,
+            'client_id': self.CLIENT_ID,
+            'grant_type': 'authorization_code',
+            'redirect_uri': self.REDIRECT_URI,
+            'code_verifier': code_verifier
         }
         auth = HTTPBasicAuth(self.CLIENT_ID, self.CLIENT_SECRET)
         url = TwitterApi.API_URL + endpoint
@@ -32,3 +31,6 @@ class TwitterOauth:
                             headers={}, auth=auth)
 
         return response.json()
+
+    def __create_login_url_param_str(token_code: str) -> str:
+        return f"response_type=code&client_id={self.CLIENT_ID}&redirect_uri={self.REDIRECT_URI}&scope=tweet.read users.read offline.access&state=state&code_challenge={token_code}&code_challenge_method=plain"
