@@ -9,7 +9,7 @@ class TwitterOauth:
     CLIENT_ID = os.environ.get("CLIENT_ID")
     CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
     OAUTH_URI = "https://twitter.com/i/oauth2/authorize"
-    REDIRECT_URI = "http://127.0.0.1:3000/callback"
+    REDIRECT_URI = "http://127.0.0.1/callback"
 
     def get_url(self):
         param_str = f"response_type=code&client_id={self.CLIENT_ID}&redirect_uri={self.REDIRECT_URI}&scope=tweet.read users.read offline.access&state=state&code_challenge=code_challenge&code_challenge_method=plain"

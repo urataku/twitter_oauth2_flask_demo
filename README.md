@@ -6,7 +6,7 @@ Twitter 0auth2.0ログインのデモアプリです。
 - User authentication settingsにて下記を設定
   - OAuth 2.0を有効化
   - Type of App : Web App
-  - Callback URI / Redirect URL : http://127.0.0.1:3000/callback
+  - Callback URI / Redirect URL : http://127.0.0.1/callback
 
 - .envを作成し、FlaskのSecret Key(ランダム文字列)、Twitter Developer Portalで作成したAppのClient ID、Client Secretを.envに追加
 
@@ -22,4 +22,4 @@ source .env
 docker-compose up
 ```
 
-- [http://127.0.0.1:3000](http://127.0.0.1:3000)にアクセス
+- [http://127.0.0.1](http://127.0.0.1)にアクセス

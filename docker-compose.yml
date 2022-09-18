@@ -8,11 +8,11 @@ services:
       - .:/build
     tty: true
     ports:
-      - 3000:3000
+      - 80:80
     environment:
-      - FLASK_ENV=development
+      - FLASK_DEBUG=1
       - FLASK_APP=index.py
       - FLASK_SECRET_KEY=${FLASK_SECRET_KEY}
       - CLIENT_ID=${CLIENT_ID}
       - CLIENT_SECRET=${CLIENT_SECRET}
-    command: flask run --host=0.0.0.0 --port 3000
+    command: flask run --host=0.0.0.0 --port 80
