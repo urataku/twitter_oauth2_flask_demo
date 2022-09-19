@@ -1,7 +1,10 @@
 import requests
 import os
+from services.random_string_maker import RandomStringMaker
 from services.twitter.api import TwitterApi
 from requests.auth import HTTPBasicAuth
+import hashlib
+import base64
 
 
 class TwitterOauth:
@@ -32,5 +35,8 @@ class TwitterOauth:
 
         return response.json()
 
-    def __create_login_url_param_str(token_code: str) -> str:
-        return f"response_type=code&client_id={self.CLIENT_ID}&redirect_uri={self.REDIRECT_URI}&scope=tweet.read users.read offline.access&state=state&code_challenge={token_code}&code_challenge_method=plain"
+    def __create_login_url_param_str(self, token_code: str) -> str:
+        encoded_token_code = base64.b64encode(hashlib.sha256(token_code.encode('utf-8')).digest()).decode()
+        code_challenge = encoded_token_code.rstrip('=').replace('=', '').replace('+', '-').replace('/', '_')
+        state = RandomStringMaker.exec(100)
+        return f"response_type=code&client_id={self.CLIENT_ID}&redirect_uri={self.REDIRECT_URI}&scope=tweet.read users.read offline.access&state={state}&code_challenge={code_challenge}&code_challenge_method=s256"
